@@ -17,9 +17,10 @@ const mongoose_1 = require("mongoose");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const port = process.env.PORT || 3000;
+//`mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.lz54k.mongodb.net/${process.env.DBNAME}retryWrites=true&w=majority`
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        const db = yield (0, mongoose_1.connect)(`mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.lz54k.mongodb.net/${process.env.DBNAME}retryWrites=true&w=majority`, () => {
+        const db = yield (0, mongoose_1.connect)("mongodb+srv://youtube_vet:VJq6w8eZ6nJFu0aQ@cluster0.fvcxm.mongodb.net/typescript-mongodb-restapiretryWrites=true&w=majority", () => {
             console.log('Base de datos conectada');
             app_1.default.listen(port, () => {
                 console.log("http://localhost:" + port);
