@@ -1,4 +1,4 @@
-import express from 'express'
+import express, {Application} from 'express'
 import {Request, Response,} from 'express'
 import morgan from 'morgan'
 const app = express()
