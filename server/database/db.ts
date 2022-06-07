@@ -1,9 +1,11 @@
 import {Pool} from 'pg'
+import dotenv from 'dotenv'
+dotenv.config()
 
 export const pool = new Pool ({
-    user: 'matias92',
-    host: 'postgresql-matias92.alwaysdata.net',
-    password: 'matute1592',
-    database: 'matias92_restapitypescriptpostgre1',
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     port: 5432,
 })
