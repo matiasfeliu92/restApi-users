@@ -1,5 +1,4 @@
 import app from './app'
-//import { connect } from 'mongoose'
 import dotenv from 'dotenv'
 dotenv.config()
 
