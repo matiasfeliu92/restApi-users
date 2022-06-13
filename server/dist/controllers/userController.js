@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUsers = void 0;
+exports.getUsersById = exports.getAllUsers = void 0;
 const db_1 = require("../database/db");
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield db_1.pool.query('SELECT * FROM users');
@@ -21,3 +21,14 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getAllUsers = getAllUsers;
+const getUsersById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = parseInt(req.params.id);
+    const user = yield db_1.pool.query('SELECT * FROM users where id = $1', [id]);
+    if (user) {
+        return res.status(200).json(user.rows);
+    }
+    else {
+        res.status(403).json({ message: 'no existe el usuario buscado' });
+    }
+});
+exports.getUsersById = getUsersById;

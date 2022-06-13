@@ -10,3 +10,13 @@ export const getAllUsers = async (req: Request, res: Response) => {
         return res.status(403).json({message: 'no existen usuarios'})
     }
 }
+
+export const getUsersById = async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id)
+    const user: QueryResult = await pool.query('SELECT * FROM users where id = $1', [id])
+    if(user){
+        return res.status(200).json(user.rows)
+    }else{
+        res.status(403).json({message: 'no existe el usuario buscado'})
+    }
+}
