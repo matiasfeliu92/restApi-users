@@ -27,25 +27,25 @@ export const getUsersById = async (req: Request, res: Response) => {
     }
 }
 
-export const createUser = async (req: Request, res: Response) => {
-    try {
-        const {name, age, country, email, password}: User = req.body
-        const hashPass = bcrypt.hashSync(password, 5)
-        await pool.query('INSERT INTO users (name, age, country, email, password) VALUES ($1, $2, $3, $4, $5)', [name, age, country, email, hashPass])
-        res.json('new user registered')
-    } catch (error) {
-        if(error instanceof Error){
-            res.status(403).json({message: error.message})
-        }
-    }
-}
+// export const createUser = async (req: Request, res: Response) => {
+//     try {
+//         const {name, age, country, email, password, ocupacion}: User = req.body
+//         const hashPass = bcrypt.hashSync(password, 5)
+//         await pool.query('INSERT INTO users (name, age, country, email, password, ocupacion) VALUES ($1, $2, $3, $4, $5, $6)', [name, age, country, email, hashPass, ocupacion])
+//         res.json('new user registered')
+//     } catch (error) {
+//         if(error instanceof Error){
+//             res.status(403).json({message: error.message})
+//         }
+//     }
+// }
 
 export const updateUser = async (req: Request, res: Response) => {
     try {
-        const {name, age, country, email, password}: User = req.body
+        const {name, age, country, email, password, ocupacion}: User = req.body
         const {id} = req.params
         const hashPass = bcrypt.hashSync(password, 5)
-        await pool.query('UPDATE users  set name = $1, age = $2, country = $3, email = $4, password = $5 WHERE id = $6', [name, age, country, email, hashPass, id])
+        await pool.query('UPDATE users  set name = $1, age = $2, country = $3, email = $4, password = $5, ocupacion = $7 WHERE id = $6', [name, age, country, email, hashPass, id, ocupacion])
         res.json('new user updated')
     } catch (error) {
         if(error instanceof Error){

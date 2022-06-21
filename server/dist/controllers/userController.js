@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.createUser = exports.getUsersById = exports.getAllUsers = void 0;
+exports.updateUser = exports.getUsersById = exports.getAllUsers = void 0;
 const db_1 = require("../database/db");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -40,26 +40,24 @@ const getUsersById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.getUsersById = getUsersById;
-const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { name, age, country, email, password } = req.body;
-        const hashPass = bcrypt_1.default.hashSync(password, 5);
-        yield db_1.pool.query('INSERT INTO users (name, age, country, email, password) VALUES ($1, $2, $3, $4, $5)', [name, age, country, email, hashPass]);
-        res.json('new user registered');
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            res.status(403).json({ message: error.message });
-        }
-    }
-});
-exports.createUser = createUser;
+// export const createUser = async (req: Request, res: Response) => {
+//     try {
+//         const {name, age, country, email, password, ocupacion}: User = req.body
+//         const hashPass = bcrypt.hashSync(password, 5)
+//         await pool.query('INSERT INTO users (name, age, country, email, password, ocupacion) VALUES ($1, $2, $3, $4, $5, $6)', [name, age, country, email, hashPass, ocupacion])
+//         res.json('new user registered')
+//     } catch (error) {
+//         if(error instanceof Error){
+//             res.status(403).json({message: error.message})
+//         }
+//     }
+// }
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, age, country, email, password } = req.body;
+        const { name, age, country, email, password, ocupacion } = req.body;
         const { id } = req.params;
         const hashPass = bcrypt_1.default.hashSync(password, 5);
-        yield db_1.pool.query('UPDATE users  set name = $1, age = $2, country = $3, email = $4, password = $5 WHERE id = $6', [name, age, country, email, hashPass, id]);
+        yield db_1.pool.query('UPDATE users  set name = $1, age = $2, country = $3, email = $4, password = $5, ocupacion = $7 WHERE id = $6', [name, age, country, email, hashPass, id, ocupacion]);
         res.json('new user updated');
     }
     catch (error) {
