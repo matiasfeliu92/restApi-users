@@ -5,4 +5,6 @@ const userController_1 = require("../controllers/userController");
 const router = (0, express_1.Router)();
 router.get('/', userController_1.getAllUsers);
 router.get('/:id', userController_1.getUsersById);
+router.post('/create', userController_1.createUser);
+router.put('/update/:id', userController_1.updateUser);
 exports.default = router;
