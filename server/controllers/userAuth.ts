@@ -8,11 +8,12 @@ export const signUp = async (req: Request, res: Response) => {
     try {
         const {name, age, country, email, password, ocupacion}: User = req.body
         const hashPass = bcrypt.hashSync(password, 5)
-        const user = await pool.query('INSERT INTO users (name, age, country, email, password, ocupacion) VALUES ($1, $2, $3, $4, $5, $6)', [name, age, country, email, hashPass, ocupacion])
+        await pool.query('INSERT INTO users (name, age, country, email, password, ocupacion) VALUES ($1, $2, $3, $4, $5, $6)', [name, age, country, email, hashPass, ocupacion])
         res.json(`new user is registered`)
     } catch (error) {
         if(error instanceof Error){
-            res.status(403).json({message: error.message})
+            console.log(error.message)
+            res.status(403).json('user is already registered')
         }
     }
 }
@@ -21,18 +22,16 @@ export const signIn = async (req: Request, res: Response) => {
     try {
         const {email, password}: User = req.body
         const user: QueryResult = await pool.query('SELECT * FROM users where email = $1', [email])
-        console.log(user.rows[0])
+        //console.log(user.rows[0])
         if(user){
             let validatePassword = bcrypt.compareSync(password, user.rows[0].password)
             if(validatePassword == true){
                 console.log('Welcome user')
-                return res.json(user.rows[0])
+                return res.json('Welcome user')
             }else{
                 console.log('las credenciales son invalidas')
-                res.status(403).json({message: 'las credenciales son invalidas'})
+                res.status(403).json('las credenciales son invalidas')
             }
-        }else{
-            res.status(403).json({message: 'no se encontro el usuario'})
         }
     } catch (error) {
         if(error instanceof Error){
