@@ -12,12 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.getUsersById = exports.getAllUsers = void 0;
+exports.updateUser = exports.getUsersById = exports.getAllUsersAndEmpress = exports.getAllUsers = void 0;
 const db_1 = require("../database/db");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield db_1.pool.query('SELECT * FROM users ORDER BY id ASC');
+        const users = yield db_1.pool.query('SELECT name, age, country, email, ocupacion FROM users ORDER BY id ASC');
         res.json(users.rows);
     }
     catch (error) {
@@ -27,6 +27,18 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getAllUsers = getAllUsers;
+const getAllUsersAndEmpress = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const usersEmpress = yield db_1.pool.query('SELECT * FROM view1');
+        res.json(usersEmpress.rows);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            res.status(403).json({ message: error.message });
+        }
+    }
+});
+exports.getAllUsersAndEmpress = getAllUsersAndEmpress;
 const getUsersById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

@@ -6,8 +6,19 @@ import bcrypt from 'bcrypt'
 
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
-        const users: QueryResult = await pool.query('SELECT * FROM users ORDER BY id ASC')
+        const users: QueryResult = await pool.query('SELECT name, age, country, email, ocupacion FROM users ORDER BY id ASC')
         res.json(users.rows)
+    } catch (error) {
+        if(error instanceof Error){
+            res.status(403).json({message: error.message})
+        }
+    }
+}
+
+export const getAllUsersAndEmpress = async (req: Request, res: Response) => {
+    try {
+        const usersEmpress: QueryResult = await pool.query('SELECT * FROM view1')
+        res.json(usersEmpress.rows)
     } catch (error) {
         if(error instanceof Error){
             res.status(403).json({message: error.message})
