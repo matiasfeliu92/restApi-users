@@ -11,11 +11,11 @@ export const connectToDatabase = async (): Promise<Connection> => {
     AppConnection = connectionManager.get('default');
   } else {
     AppConnection = await createConnection({
-      type: 'mysql',
+      type: 'postgres',
       host: 'localhost',
-      port: 3306,
+      port: 5432,
       username: process.env.DB_USER,
-      password: '',
+      password: process.env.DB_PASS,
       database: process.env.DB_NAME,
       entities: [User],
       logging: true,
