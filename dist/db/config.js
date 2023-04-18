@@ -12,15 +12,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("./app"));
+exports.connectToDatabase = void 0;
+const typeorm_1 = require("typeorm");
 const dotenv_1 = __importDefault(require("dotenv"));
+const users_models_1 = require("../models/users.models");
 dotenv_1.default.config();
-const port = process.env.PORT || 3000;
-function main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        app_1.default.listen(port, () => {
-            console.log("http://localhost:" + port);
+let AppConnection;
+const connectToDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
+    const connectionManager = (0, typeorm_1.getConnectionManager)();
+    if (connectionManager.has('default')) {
+        AppConnection = connectionManager.get('default');
+    }
+    else {
+        AppConnection = yield (0, typeorm_1.createConnection)({
+            type: 'postgres',
+            host: 'localhost',
+            port: 5432,
+            username: process.env.DB_USER,
+            password: process.env.DB_PASS,
+            database: process.env.DB_NAME,
+            entities: [users_models_1.User],
+            logging: true,
+            synchronize: true,
         });
-    });
-}
-main();
+    }
+    return AppConnection;
+});
+exports.connectToDatabase = connectToDatabase;
