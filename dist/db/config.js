@@ -25,11 +25,11 @@ const connectToDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     else {
         AppConnection = yield (0, typeorm_1.createConnection)({
-            type: 'mysql',
+            type: 'postgres',
             host: 'localhost',
-            port: 3306,
+            port: 5432,
             username: process.env.DB_USER,
-            password: '',
+            password: process.env.DB_PASS,
             database: process.env.DB_NAME,
             entities: [users_models_1.User],
             logging: true,

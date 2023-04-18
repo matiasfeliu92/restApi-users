@@ -9,4 +9,6 @@ const userRouter = (0, express_1.Router)();
 const userController = new users_controller_1.default();
 userRouter.get('/', userController.getAllUsers);
 userRouter.get('/:id', userController.getUserById);
+userRouter.post('/signup', userController.signUp);
+userRouter.post('/signin', userController.signIn);
 exports.default = userRouter;
