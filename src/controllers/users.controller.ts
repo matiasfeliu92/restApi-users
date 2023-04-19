@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import { User } from '../models/users.models';
 import { getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+dotenv.config()
 
 class UserController {
 
@@ -54,22 +57,31 @@ class UserController {
 
     async signIn(req:Request, res:Response) {
       try {
-
         const { email, password } = req.body
         const userRepository = getRepository(User)
         const user = await userRepository.findOne({ where: {email} });
-        const passwordMatches = await bcrypt.compare(password, user!.password);
-
-        if(!user || !passwordMatches) {
-          return res.status(401).json({ message: 'Invalid credentials' });
+        const secret = process.env.JWT_SECRET || 'defaultSecretValue'
+    
+        if(user) {
+          const passwordMatches = await bcrypt.compare(password, user.password);
+    
+          if(passwordMatches) {
+            const token = jwt.sign(
+              { userId: user.id, email: user.email },secret,{ expiresIn: '1h' },
+            );
+            return res.status(200).json({ message: `Welcome ${user.name}`, token: token });
+          } else {
+            return res.status(401).json({ message: 'Invalid credentials' });
+          }
+          
         } else {
-          return res.status(200).json({ message: `Welcome ${user!.name}` }); 
+          return res.status(401).json({ message: 'Invalid credentials' });
         }
-
       } catch (error) {
-        res.status(500).json({ message: error });
+        res.status(500).json({ message: 'User not found'});
       }
     }
+    
 }
 
 export default UserController;
