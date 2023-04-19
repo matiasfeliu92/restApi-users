@@ -50,7 +50,6 @@ app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, express_1.json)());
 app.use('/users', users_routes_1.default);
-// app.use('/categories', categoriesRoutes.router);
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         yield (0, config_1.connectToDatabase)();
