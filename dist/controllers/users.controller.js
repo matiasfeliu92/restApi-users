@@ -26,6 +26,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const users_models_1 = require("../models/users.models");
 const typeorm_1 = require("typeorm");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 class UserController {
     getAllUsers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -82,16 +85,23 @@ class UserController {
                 const { email, password } = req.body;
                 const userRepository = (0, typeorm_1.getRepository)(users_models_1.User);
                 const user = yield userRepository.findOne({ where: { email } });
-                const passwordMatches = yield bcrypt_1.default.compare(password, user.password);
-                if (!user || !passwordMatches) {
-                    return res.status(401).json({ message: 'Invalid credentials' });
+                const secret = process.env.JWT_SECRET || 'defaultSecretValue';
+                if (user) {
+                    const passwordMatches = yield bcrypt_1.default.compare(password, user.password);
+                    if (passwordMatches) {
+                        const token = jsonwebtoken_1.default.sign({ userId: user.id, email: user.email }, secret, { expiresIn: '1h' });
+                        return res.status(200).json({ message: `Welcome ${user.name}`, token: token });
+                    }
+                    else {
+                        return res.status(401).json({ message: 'Invalid credentials' });
+                    }
                 }
                 else {
-                    return res.status(200).json({ message: `Welcome ${user.name}` });
+                    return res.status(401).json({ message: 'Invalid credentials' });
                 }
             }
             catch (error) {
-                res.status(500).json({ message: error });
+                res.status(500).json({ message: 'User not found' });
             }
         });
     }
